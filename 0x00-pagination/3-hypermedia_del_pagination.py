@@ -7,6 +7,7 @@ import csv
 import math
 from typing import List, Dict, Any, Tuple
 
+
 def index_range(page: int, page_size: int) -> Tuple[int, int]:
     """Retrieves the index range from a given page and page size.
 
@@ -51,7 +52,9 @@ class Server:
         """
         if self.__indexed_dataset is None:
             dataset = self.dataset()
-            self.__indexed_dataset = {i: dataset[i] for i in range(len(dataset))}
+            self.__indexed_dataset = {
+                i: dataset[i] for i in range(len(dataset))
+            }
         return self.__indexed_dataset
 
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List[str]]:
@@ -72,7 +75,7 @@ class Server:
             return []
         return data[start:end]
 
-    def get_hyper_index(self, index: int = 0, page_size: int = 10) -> Dict[str, Any]:
+    def get_hyper_index(self, index: int = None, page_size: int = 10) -> Dict[str, Any]:
         """Retrieves a page of data with deletion-resilience.
 
         Args:
@@ -101,3 +104,4 @@ class Server:
             'page_size': len(page_data),
             'data': page_data,
         }
+        

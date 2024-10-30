@@ -8,6 +8,7 @@ from typing import List, Dict, Any, Tuple
 import csv
 import math
 
+
 def index_range(page: int, page_size: int) -> Tuple[int, int]:
     """Retrieves the index range from a given page and page size.
 
@@ -83,7 +84,8 @@ class Server:
             'page_size': len(page_data),
             'page': page,
             'data': page_data,
-            'next_page': page + 1 if start + len(page_data) < len(self.dataset()) else None,
+            'next_page': page + 1 if start + len(page_data)
+            < len(self.dataset()) else None,
             'prev_page': page - 1 if start > 0 else None,
             'total_pages': total_pages,
         }
