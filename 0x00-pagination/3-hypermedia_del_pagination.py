@@ -40,7 +40,7 @@ class Server:
             with open(self.DATA_FILE) as f:
                 reader = csv.reader(f)
                 dataset = [row for row in reader]
-            self.__dataset = dataset[1:]  # Skip header
+            self.__dataset = dataset[1:]
 
         return self.__dataset
 
@@ -67,7 +67,7 @@ class Server:
         Returns:
             List[List[str]]: The requested page of the dataset.
         """
-        assert type(page) == int and type(page_size) == int
+        assert isinstance(page, int) and isinstance(page_size, int)
         assert page > 0 and page_size > 0
         start, end = index_range(page, page_size)
         data = self.dataset()
