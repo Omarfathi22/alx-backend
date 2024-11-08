@@ -1,18 +1,15 @@
 #!/usr/bin/env python3
-"""A simple Flask app with internationalization support.
-"""
-from flask_babel import Babel
+"""A simple Flask app with internationalization support."""
+from flask_babel import Babel, _
 from typing import Union, Dict
 from flask import Flask, render_template, request, g
 
 
 class Config:
-    """Configuration for Flask Babel.
-    """
-    LANGUAGES = ["en", "fr"]  # Supported languages
-    BABEL_DEFAULT_LOCALE = "en"  # Default language
-    BABEL_DEFAULT_TIMEZONE = "UTC"  # Default timezone
-
+    """Configuration for Flask Babel."""
+    LANGUAGES = ["en", "fr"]
+    BABEL_DEFAULT_LOCALE = "en"
+    BABEL_DEFAULT_TIMEZONE = "UTC"
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -29,45 +26,34 @@ users = {
 
 
 def get_user() -> Union[Dict, None]:
-    """Fetches a user based on the 'login_as' query parameter.
-    """
+    """Fetches a user based on the 'login_as' query parameter."""
     login_id = request.args.get('login_as', '')
-    if login_id:
-        return users.get(int(login_id), None)
+    if login_id.isdigit():
+        return users.get(int(login_id))
     return None
 
 
 @app.before_request
 def before_request() -> None:
-    """Sets up the user context before each request.
-    """
-    user = get_user()
-    g.user = user
+    """Sets up the user context before each request."""
+    g.user = get_user()
 
 
 @babel.localeselector
 def get_locale() -> str:
-    """Determines the locale for the current request.
-    """
-    locale = request.args.get('locale', '')  # Check for 'locale' in query string
+    """Determines the locale for the current request."""
+    locale = request.args.get('locale', '')
     if locale in app.config["LANGUAGES"]:
         return locale
-    
-    if g.user and g.user['locale'] in app.config["LANGUAGES"]:  # Check user-specific locale
-        return g.user['locale']
-    
-    header_locale = request.headers.get('locale', '')  # Check for 'locale' in headers
-    if header_locale in app.config["LANGUAGES"]:
-        return header_locale
-    
-    return request.accept_languages.best_match(app.config["LANGUAGES"])  # Fallback to best match
+    if g.user and g.user.get("locale") in app.config["LANGUAGES"]:
+        return g.user["locale"]
+    return request.accept_languages.best_match(app.config["LANGUAGES"])
 
 
 @app.route('/')
 def get_index() -> str:
-    """Render the homepage.
-    """
-    return render_template('6-index.html')
+    """Render the homepage."""
+    return render_template('6-index.html', user=g.user)
 
 
 if __name__ == '__main__':

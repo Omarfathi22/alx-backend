@@ -5,8 +5,10 @@ using Flask-Babel. The app renders a home page and detects the preferred
 language of the user (English or French) based on their `Accept-Language`
 header.
 """
+
 from flask_babel import Babel
 from flask import Flask, render_template, request
+
 
 # Configuration class to set up Flask-Babel with the supported languages
 class Config:
@@ -20,6 +22,7 @@ class Config:
     BABEL_DEFAULT_LOCALE = "en"  # Default language is English
     BABEL_DEFAULT_TIMEZONE = "UTC"  # Default timezone is UTC
 
+
 # Initialize the Flask application object.
 app = Flask(__name__)
 
@@ -31,6 +34,7 @@ app.url_map.strict_slashes = False
 
 # Initialize the Babel extension with the app to handle language localization.
 babel = Babel(app)
+
 
 # Define a function to retrieve the best match for the locale based on the user's request.
 @babel.localeselector
@@ -48,6 +52,7 @@ def get_locale() -> str:
     # Retrieve the best match for the language from the 'Accept-Language' header
     return request.accept_languages.best_match(app.config["LANGUAGES"])
 
+
 # Define the route for the home/index page of the application.
 @app.route('/')
 def get_index() -> str:
@@ -62,6 +67,7 @@ def get_index() -> str:
     """
     # Render and return the '2-index.html' template.
     return render_template('2-index.html')
+
 
 # Start the Flask development server only if this script is executed directly.
 if __name__ == '__main__':

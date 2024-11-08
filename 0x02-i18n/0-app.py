@@ -3,6 +3,8 @@
 A basic Flask web application that serves an index page.
 This app uses Flask to render an HTML template for the home page.
 """
+
+
 from flask import Flask, render_template # type: ignore
 
 
@@ -22,8 +24,11 @@ def get_index() -> str:
     Returns:
         str: The rendered HTML page from the template.
     """
+    
 
     return render_template('0-index.html')
+
+
 
 if __name__ == '__main__':
     """
